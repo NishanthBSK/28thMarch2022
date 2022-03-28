@@ -1,3 +1,4 @@
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -5,33 +6,21 @@ public class ExceptionTest {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		/*int a=100;
-		int b=0;
-		int c=a/b;
-		Scanner s=new Scanner(System.in);
 		
-		try {
-			System.out.println("Enter a integer");
-			b=s.nextInt();
-			c=a/b;
-		}
-		catch(ArithmeticException ar)
-		{
-			System.out.println("Cant divide by zero "+ar);
-		}
-		catch(InputMismatchException e)
-		{
-			System.out.println("Enter integer "+e);
-		}
-		finally 
-		{
-			System.out.println(+a+" "+b);
-		}
-		
-		*/
 		try
 		{
-			Studnt st1=new Studnt();
+			Studnt st1=new Studnt("Student1");
+			//Studnt st2=new Studnt("Student2");
+			st1.t.start();
+			//st2.t.start();
+			for(int i=0 ;i<5;i++)
+			{
+				System.out.println("Main Thread"+i);
+				Thread.sleep(5000);
+			}
+			
+			
+		
 		}
 		catch (nameExcpetion e)
 		{
@@ -41,13 +30,19 @@ public class ExceptionTest {
 		{
 			System.out.println(e.getMessage());
 		}
+		catch(InterruptedException e)
+		{
+			System.out.println("caught Interrupted exception");
+		}
+		System.out.println("exiting Main Thread");
+		
 		
 
 	}
 
 }
 
-class Studnt
+class Studnt implements Runnable
 {
 	int age;
 	String firstName;
@@ -55,30 +50,65 @@ class Studnt
 	String lastName;
 	Scanner s=new Scanner(System.in);
 	boolean status;
+	Thread t;
 	
-	public Studnt() throws nameExcpetion,ageException
-	{
-		// TODO Auto-generated constructor stub
-		System.out.println("Please enter the student details");
-		System.out.println("First Name");
-		firstName=s.next();
-		status=nameCheck(firstName);
+	public Studnt(String s) throws nameExcpetion,ageException
+	{	
+		t=new Thread(this, s);
+		System.out.println("Child Thread"+t);
 		
-		System.out.println("Middle Name");
-		middleName=s.next();
-		status=nameCheck(middleName);
-		System.out.println("Last Name");
-		lastName=s.next();
-		status=nameCheck(lastName);
-		System.out.println("Age");
-		age=s.nextInt();
-		if (age<0)
+		// TODO Auto-generated constructor stub
+		
+	}
+	
+	public void run()
+	{
+		try
 		{
-			throw new ageException("Age cannot be negative");
+			System.out.println("Please enter the student details of "+t.getName());
+		
+			System.out.println("First Name of "+t.getName());
+			Thread.sleep(500);
+			firstName=s.next();
+			status=nameCheck(firstName);
+		
+			System.out.println("Middle Name of "+t.getName());
+			Thread.sleep(500);
+			middleName=s.next();
+			status=nameCheck(middleName);
+			System.out.println("Last Name of "+t.getName());
+			Thread.sleep(500);
+			lastName=s.next();
+			status=nameCheck(lastName);
+			System.out.println("Age of "+t.getName());
+			Thread.sleep(500);
+			age=s.nextInt();
+			Thread.sleep(500);
+			if (age<0)
+			{
+				throw new ageException("Age cannot be negative");
+			}
+		
+			System.out.println("The student details of "+ t.getName() +" are \nName "+firstName+" "+middleName+" "+lastName);
+			System.out.println("Age is "+age);	
+		
+			
 		}
 		
-		System.out.println("The student details are \nName "+firstName+" "+middleName+" "+lastName);
-		System.out.println("Age is "+age);	
+		catch (nameExcpetion e)
+		{
+			System.out.println(e.getMessage());
+		}
+		catch (ageException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		catch(InterruptedException e)
+		{
+			System.out.println("caught Interrupted exception");
+		}
+		
+		System.out.println("exiting Child Thread");
 		
 		
 	}
@@ -129,4 +159,3 @@ class ageException extends Exception
 		super(st);
 	}
 }
-
